@@ -947,7 +947,7 @@ def get_Batch_P_Wjxs(
     # dyadic scales
     if (scales_type == 'dyadic') and (channels_t_is is None):
         Ptxs = [x]
-        Ptx = x.detach().clone()
+        Ptx = x
         
         # calc P^t x for t \in 1...2^J, saving ts in
         # powers of 2
@@ -965,7 +965,7 @@ def get_Batch_P_Wjxs(
     # 'handcrafted' scales
     elif (scales_type == 'handcrafted') and (channels_t_is is not None):
         Ptxs = [x.to_dense()]
-        Ptx = x.detach().clone()
+        Ptx = x
         
         # calc P^t x for t \in 1...T, saving all powers of t
         for j in range(1, max_t + 1):
@@ -996,7 +996,7 @@ def get_Batch_P_Wjxs(
         # print('Wjxs.shape:', Wjxs.shape)
 
     elif scales_type is None:
-        Ptx = x.detach().clone()
+        Ptx = x
         Ptx = torch.sparse.mm(P_sparse, Ptx)
         Wjxs = Ptx.unsqueeze(dim=-1)
     else:
@@ -1129,7 +1129,7 @@ def handcrafted_P_wavelet_scales(
         
         # calc P^t x for t \in 1...T
         # make each Ptx in list dense here so tensor slicing below works
-        Ptx = x.detach().clone()
+        Ptx = x
         Ptxs = [x.to_dense()] # densify AFTER copying sparse x for recursive mm
         for j in range(1, T + 1):
             Ptx = torch.sparse.mm(P_sparse, Ptx)
